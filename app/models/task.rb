@@ -5,8 +5,13 @@ class Task < ActiveRecord::Base
 		@list = Task.all
 		i = 0
 		until i == @list.length
-			puts "#{i+1}. #{@list[i].description} #{@list[i].status}"
-			i += 1
+			if @list[i].status == 1
+				@status1 = "Done"
+			else
+				@status1 = "Outstanding"
+			end
+		puts "#{i+1}. #{@list[i].description}_______#{[@status1]}"
+		i += 1
 		end
 
 		# @list.each do |x|
@@ -35,7 +40,7 @@ class Task < ActiveRecord::Base
 	end
 
 	def self.complete(id)
-		to_complete = Task.all.find_by(id:id)
+		to_complete = Task.all.find_by(id:id-1)
 		to_complete.status = 1
 		to_complete.save!
 		# if to_complete.status == 1
@@ -45,7 +50,7 @@ class Task < ActiveRecord::Base
 	def self.reset_id
 		i=0
 		self.find_each do |x|
-			x.status(id:i)
+			x.id = i
 			x.save!
 			i+=1
 		end
